@@ -10,6 +10,8 @@ export default function InterviewChat() {
     candidateName,
     customQuestions,
     useCustomQuestions,
+    isInterviewActive,
+    isInterviewComplete,
     addMessage,
     completeInterview,
     setAssessment,
@@ -23,10 +25,12 @@ export default function InterviewChat() {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const startTimeRef = useRef<number | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -35,6 +39,31 @@ export default function InterviewChat() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Timer effect
+  useEffect(() => {
+    if (isInterviewActive && !isInterviewComplete) {
+      startTimeRef.current = Date.now();
+      const interval = setInterval(() => {
+        if (startTimeRef.current) {
+          setElapsedTime(Math.floor((Date.now() - startTimeRef.current) / 1000));
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    } else {
+      setElapsedTime(0);
+      startTimeRef.current = null;
+    }
+  }, [isInterviewActive, isInterviewComplete]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Calculate progress based on expected 3-5 questions (estimate 12 messages = complete)
+  const progress = Math.min((messages.length / 12) * 100, 100);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -366,9 +395,31 @@ export default function InterviewChat() {
   return (
     <div className="flex flex-col h-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
       <div className="p-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
-        <h2 className="text-xl font-bold text-gray-800">Voice Interview with {candidateName}</h2>
-        <p className="text-sm text-gray-600">Position: {jobTitle}</p>
-        <p className="text-xs text-gray-500 mt-1">
+        <div className="flex justify-between items-start mb-2">
+          <div>
+            <h2 className="text-xl font-bold text-gray-800">Voice Interview with {candidateName}</h2>
+            <p className="text-sm text-gray-600">Position: {jobTitle}</p>
+          </div>
+          <div className="text-right">
+            <div className="text-lg font-semibold text-gray-800">
+              ⏱️ {formatTime(elapsedTime)}
+            </div>
+            <div className="text-xs text-gray-500">Duration</div>
+          </div>
+        </div>
+        <div className="mt-3">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs text-gray-600">Progress</span>
+            <span className="text-xs text-gray-600">{Math.round(progress)}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+        </div>
+        <p className="text-xs text-gray-500 mt-2">
           💬 Speak your responses or type them below
         </p>
       </div>

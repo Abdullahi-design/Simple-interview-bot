@@ -69,12 +69,68 @@ export default function Assessment() {
           </div>
         </div>
 
-        <button
-          onClick={resetInterview}
-          className="mt-6 w-full py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors"
-        >
-          Start New Interview
-        </button>
+        <div className="mt-6 flex gap-3">
+          <button
+            onClick={() => {
+              // Export as JSON
+              const data = {
+                candidate: { name: candidateName, email: candidateEmail },
+                position: jobTitle,
+                assessment,
+                transcript: messages,
+                completedAt: new Date().toISOString(),
+              };
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `interview-${candidateName.replace(/\s+/g, '-')}-${Date.now()}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 transition-colors"
+          >
+            Export JSON
+          </button>
+          <button
+            onClick={() => {
+              // Export as text/CSV-like format
+              let text = `Interview Assessment\n`;
+              text += `===================\n\n`;
+              text += `Candidate: ${candidateName}\n`;
+              text += `Email: ${candidateEmail}\n`;
+              text += `Position: ${jobTitle}\n`;
+              text += `Score: ${assessment.score}\n\n`;
+              text += `Summary:\n${assessment.summary}\n\n`;
+              text += `Key Insights:\n`;
+              assessment.insights.forEach((insight, i) => {
+                text += `${i + 1}. ${insight}\n`;
+              });
+              text += `\n\nFull Transcript:\n`;
+              text += `================\n\n`;
+              messages.forEach((msg) => {
+                text += `${msg.role === 'user' ? 'Candidate' : 'Interviewer'}: ${msg.content}\n\n`;
+              });
+              
+              const blob = new Blob([text], { type: 'text/plain' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `interview-${candidateName.replace(/\s+/g, '-')}-${Date.now()}.txt`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 transition-colors"
+          >
+            Export Text
+          </button>
+          <button
+            onClick={resetInterview}
+            className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors"
+          >
+            Start New Interview
+          </button>
+        </div>
       </div>
     </div>
   );
