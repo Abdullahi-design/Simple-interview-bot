@@ -129,6 +129,69 @@ export default function InterviewDetailPage() {
               ))}
             </div>
           </div>
+
+          <div className="mt-6 flex gap-3">
+            <button
+              onClick={() => {
+                // Export as JSON
+                const data = {
+                  candidate: { 
+                    name: interview.candidateName, 
+                    email: interview.candidateEmail 
+                  },
+                  position: interview.jobTitle,
+                  assessment: interview.assessment,
+                  transcript: interview.messages,
+                  completedAt: interview.completedAt.toISOString(),
+                };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `interview-${interview.candidateName.replace(/\s+/g, '-')}-${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 transition-colors"
+            >
+              Export JSON
+            </button>
+            <button
+              onClick={() => {
+                // Export as text/CSV-like format
+                let text = `Interview Assessment\n`;
+                text += `===================\n\n`;
+                text += `Candidate: ${interview.candidateName}\n`;
+                text += `Email: ${interview.candidateEmail}\n`;
+                text += `Position: ${interview.jobTitle}\n`;
+                text += `Completed: ${formatDate(interview.completedAt)}\n`;
+                if (interview.assessment) {
+                  text += `Score: ${interview.assessment.score}\n\n`;
+                  text += `Summary:\n${interview.assessment.summary}\n\n`;
+                  text += `Key Insights:\n`;
+                  interview.assessment.insights.forEach((insight, i) => {
+                    text += `${i + 1}. ${insight}\n`;
+                  });
+                }
+                text += `\n\nFull Transcript:\n`;
+                text += `================\n\n`;
+                interview.messages.forEach((msg) => {
+                  text += `${msg.role === 'user' ? 'Candidate' : 'Interviewer'}: ${msg.content}\n\n`;
+                });
+                
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `interview-${interview.candidateName.replace(/\s+/g, '-')}-${Date.now()}.txt`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 transition-colors"
+            >
+              Export Text
+            </button>
+          </div>
         </div>
       </div>
     </div>
