@@ -25,31 +25,32 @@ export default function InterviewsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-10">
           <div>
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+            <h1 className="text-5xl font-bold text-slate-900 mb-3 tracking-tight">
               Past Interviews
             </h1>
-            <p className="text-gray-600">
+            <p className="text-lg text-slate-600">
               View and manage all completed interviews
             </p>
           </div>
           <Link
             href="/"
-            className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             New Interview
           </Link>
         </div>
 
         {pastInterviews.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-lg p-12 text-center">
-            <p className="text-gray-600 text-lg mb-4">No interviews yet</p>
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 p-16 text-center">
+            <div className="text-6xl mb-4">📋</div>
+            <p className="text-slate-600 text-xl mb-4 font-medium">No interviews yet</p>
             <Link
               href="/"
-              className="text-blue-600 hover:text-blue-800 font-medium"
+              className="text-indigo-600 hover:text-indigo-800 font-semibold inline-flex items-center gap-2"
             >
               Start your first interview →
             </Link>
@@ -59,7 +60,7 @@ export default function InterviewsPage() {
             {pastInterviews.map((interview) => (
               <div
                 key={interview.id}
-                className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
+                className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>

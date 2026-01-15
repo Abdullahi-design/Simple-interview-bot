@@ -393,56 +393,56 @@ export default function InterviewChat() {
   }, [messages.length]);
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
-      <div className="p-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
-        <div className="flex justify-between items-start mb-2">
+    <div className="flex flex-col h-full max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl border border-slate-200/60 overflow-hidden">
+      <div className="p-6 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-blue-50">
+        <div className="flex justify-between items-start mb-4">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">Voice Interview with {candidateName}</h2>
-            <p className="text-sm text-gray-600">Position: {jobTitle}</p>
+            <h2 className="text-2xl font-bold text-slate-900 mb-1">Interview with {candidateName}</h2>
+            <p className="text-sm text-slate-600 font-medium">{jobTitle}</p>
           </div>
-          <div className="text-right">
-            <div className="text-lg font-semibold text-gray-800">
-              ⏱️ {formatTime(elapsedTime)}
+          <div className="text-right bg-white px-4 py-2.5 rounded-lg shadow-sm border border-slate-200">
+            <div className="text-xl font-bold text-slate-900">
+              {formatTime(elapsedTime)}
             </div>
-            <div className="text-xs text-gray-500">Duration</div>
+            <div className="text-xs text-slate-500 font-medium">Duration</div>
           </div>
         </div>
-        <div className="mt-3">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs text-gray-600">Progress</span>
-            <span className="text-xs text-gray-600">{Math.round(progress)}%</span>
+        <div className="mt-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Progress</span>
+            <span className="text-xs font-semibold text-slate-700">{Math.round(progress)}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-indigo-600 to-blue-600 h-2.5 rounded-full transition-all duration-500 shadow-sm"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-slate-500 mt-3 font-medium">
           💬 Speak your responses or type them below
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-[400px] max-h-[500px]">
+      <div className="flex-1 overflow-y-auto p-6 space-y-4 min-h-[400px] max-h-[500px] bg-slate-50/50">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[80%] rounded-lg px-4 py-2 ${
+              className={`max-w-[80%] rounded-2xl px-5 py-3 shadow-sm ${
                 message.role === 'user'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-800'
+                  ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white'
+                  : 'bg-white text-slate-800 border border-slate-200'
               }`}
             >
-              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
               {message.role === 'assistant' && (
                 <button
                   onClick={() => playTextToSpeech(message.content)}
                   disabled={isPlaying}
-                  className="mt-2 text-xs text-blue-600 hover:text-blue-800 disabled:opacity-50"
+                  className="mt-2 text-xs text-indigo-600 hover:text-indigo-800 disabled:opacity-50 font-medium transition-colors"
                   title="Replay audio"
                 >
                   🔊 Replay
@@ -453,11 +453,11 @@ export default function InterviewChat() {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 rounded-lg px-4 py-2">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+            <div className="bg-white rounded-2xl px-5 py-3 shadow-sm border border-slate-200">
+              <div className="flex space-x-1.5">
+                <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
@@ -465,20 +465,20 @@ export default function InterviewChat() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 border-t border-gray-200 bg-gray-50">
-        <div className="flex gap-2 mb-2">
+      <div className="p-5 border-t border-slate-200 bg-gradient-to-r from-slate-50 to-blue-50">
+        <div className="flex gap-3 mb-3">
           <button
             onClick={isRecording ? stopRecording : startRecording}
             disabled={isLoading || isPlaying || isTranscribing}
-            className={`px-6 py-2 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg ${
               isRecording
-                ? 'bg-red-600 text-white hover:bg-red-700'
-                : 'bg-green-600 text-white hover:bg-green-700'
+                ? 'bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800'
+                : 'bg-gradient-to-r from-emerald-600 to-green-600 text-white hover:from-emerald-700 hover:to-green-700'
             }`}
           >
             {isRecording ? (
               <>
-                <span className="inline-block w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+                <span className="inline-block w-2.5 h-2.5 bg-white rounded-full mr-2 animate-pulse"></span>
                 Stop Recording
               </>
             ) : (
@@ -488,39 +488,39 @@ export default function InterviewChat() {
             )}
           </button>
           {isRecording && (
-            <div className="flex items-center text-red-600 text-sm">
+            <div className="flex items-center text-red-600 text-sm font-semibold px-4 py-2 bg-red-50 rounded-lg">
               <span className="animate-pulse">Recording...</span>
             </div>
           )}
           {isTranscribing && (
-            <div className="flex items-center text-blue-600 text-sm">
+            <div className="flex items-center text-indigo-600 text-sm font-semibold px-4 py-2 bg-indigo-50 rounded-lg">
               <span className="animate-pulse">Transcribing...</span>
             </div>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="Or type your response here..."
-            className="flex-1 px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 px-5 py-3 border border-slate-300 text-slate-900 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white shadow-sm disabled:bg-slate-100"
             disabled={isLoading || isRecording || isTranscribing}
           />
           <button
             onClick={() => handleSend()}
             disabled={isLoading || !input.trim() || isRecording || isTranscribing}
-            className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
           >
             Send
           </button>
           <button
             onClick={handleEndInterview}
             disabled={isLoading || isRecording || isTranscribing}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-medium hover:bg-gray-300 transition-colors disabled:opacity-50"
+            className="px-5 py-3 bg-white text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-all duration-200 disabled:opacity-50 border border-slate-300 shadow-sm hover:shadow"
           >
-            End Interview
+            End
           </button>
         </div>
       </div>
