@@ -13,6 +13,7 @@ export default function InterviewChat() {
     addMessage,
     completeInterview,
     setAssessment,
+    saveInterview,
   } = useInterviewStore();
   
   const getCurrentMessages = () => useInterviewStore.getState().messages;
@@ -318,6 +319,8 @@ export default function InterviewChat() {
           insights: data.insights || [],
         });
         completeInterview();
+        // Save interview to localStorage
+        saveInterview();
       }
     } catch (error) {
       console.error('Error generating assessment:', error);
@@ -346,6 +349,7 @@ export default function InterviewChat() {
     // Wait a moment for the message to be displayed and played
     setTimeout(async () => {
       await generateAssessment();
+      // Note: saveInterview is called in generateAssessment
     }, 2000);
   };
 
