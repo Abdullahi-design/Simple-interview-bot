@@ -135,7 +135,7 @@ export default function SetupForm() {
                 onChange={(e) => setQuestionInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleAddQuestion()}
                 placeholder="Enter a question and press Enter"
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 px-4 py-2 border text-black border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button
                 onClick={handleAddQuestion}

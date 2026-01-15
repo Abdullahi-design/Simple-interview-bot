@@ -6,6 +6,12 @@ An AI-powered interview screening tool that enables recruiters to conduct automa
 
 ### Core Features
 
+- **Voice Communication** 🎤
+  - Speech-to-text input using OpenAI Whisper API
+  - Text-to-speech output using OpenAI TTS API
+  - Natural voice conversation experience
+  - Option to type responses as fallback
+
 - **Interview Setup Interface**
   - Input job title/role being hired for
   - Accept candidate name and email
@@ -31,7 +37,7 @@ An AI-powered interview screening tool that enables recruiters to conduct automa
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling
 - **Zustand** - State management
-- **OpenAI API** - AI-powered interview and assessment generation
+- **OpenAI API** - AI-powered interview, assessment generation, text-to-speech (TTS), and speech-to-text (Whisper)
 
 ## Getting Started
 
@@ -74,8 +80,11 @@ npm run dev
    - Click "Start Interview"
 
 2. **Interview Phase**:
-   - The AI interviewer will greet the candidate and ask questions
-   - Candidate responds to each question
+   - The AI interviewer will greet the candidate with voice and ask questions
+   - Candidate can respond by:
+     - **Speaking**: Click the "🎤 Speak" button and speak your response
+     - **Typing**: Type your response in the text field
+   - AI responses are automatically spoken using ElevenLabs
    - AI may ask follow-up questions based on responses
    - Click "End Interview" when ready to complete
 
@@ -122,10 +131,13 @@ Make sure to set the `OPENAI_API_KEY` environment variable in your deployment pl
 
 ## Notes
 
-- The application uses OpenAI's API, so you'll need an active OpenAI API key
+- The application uses OpenAI's API for conversation, text-to-speech, and speech-to-text, so you'll need an active OpenAI API key
 - API keys should never be committed to the repository
+- Speech-to-text uses OpenAI Whisper API (works in all modern browsers)
 - The interview flow is designed to be flexible - recruiters can end interviews at any time
 - Assessment is generated automatically when the interview ends
+- Voice responses are automatically played when AI responds
+- OpenAI TTS uses the "alloy" voice by default (can be changed in `/app/api/tts/route.ts`)
 
 ## License
 
