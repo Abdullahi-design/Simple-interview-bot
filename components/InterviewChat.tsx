@@ -259,12 +259,25 @@ export default function InterviewChat() {
           const lastResponse = data.response.toLowerCase();
           
           // Check if interview should end (AI indicates completion or enough exchanges)
-          if (lastResponse.includes('thank you') || 
-              lastResponse.includes('conclusion') ||
-              lastResponse.includes('wrap up') ||
-              currentMessages.length >= 10) {
-            // Generate assessment
-            await generateAssessment();
+          // Look for closing phrases that indicate the interview is ending
+          const closingPhrases = [
+            'thank you for taking the time',
+            'thank you for your time',
+            'you\'ll hear from us',
+            'hear from us if',
+            'selected for the next stage',
+            'appreciate your interest',
+            'conclusion',
+            'wrap up'
+          ];
+          
+          const isClosing = closingPhrases.some(phrase => lastResponse.includes(phrase));
+          
+          if (isClosing || currentMessages.length >= 12) {
+            // Small delay to ensure closing message is fully displayed
+            setTimeout(async () => {
+              await generateAssessment();
+            }, 500);
           }
         }, 100);
       } else if (data.error) {
@@ -322,7 +335,18 @@ export default function InterviewChat() {
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    await generateAssessment();
+    
+    // Add closing message before generating assessment
+    const closingMessage = "Thank you for taking the time to speak with me today. We appreciate your interest in this position. You'll hear from us if you've been selected for the next stage. Have a great day!";
+    addMessage({ role: 'assistant', content: closingMessage });
+    
+    // Play the closing message
+    await playTextToSpeech(closingMessage);
+    
+    // Wait a moment for the message to be displayed and played
+    setTimeout(async () => {
+      await generateAssessment();
+    }, 2000);
   };
 
   // Play initial greeting when interview starts
